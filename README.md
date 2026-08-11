@@ -130,8 +130,11 @@ SECRET_KEY=your-secret-key-change-me
 
 ```bash
 # —— 本机（仅需做一次）——
-# 1. 在 backend/data-image/ 目录下，把语料库 JSON 压缩成 .gz：
-#    （这是构建数据镜像的唯一准备步骤）
+# 1. 下载语料库 JSON 并压缩成 .gz（backend/data-image/ 目录下）
+#    语料库 JSON（约 1.8GB）不放进 git，需从数据源下载：
+#    下载地址：https://huggingface.co/datasets/xzm1999/XiaChuFang_Recipe_Corpus
+#    文件：recipe_corpus_full.json
+#    下载后放到 backend/data-image/ 目录，然后 gzip：
 gzip -9 -k recipe_corpus_full.json      # 生成 recipe_corpus_full.json.gz，约 400MB
 
 # 2. 构建数据镜像（scratch 基础镜像，把 .gz 打进去）
