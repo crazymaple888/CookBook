@@ -43,7 +43,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "build:web": "expo export --platform web",
+    "build:android": "expo export --platform android",
+    "build:ios": "expo export --platform ios"
   },
   "private": true
 }
