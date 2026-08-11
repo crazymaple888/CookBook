@@ -9,6 +9,8 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -28,12 +30,16 @@ jobs:
           EXPO_PUBLIC_API_URL: http://123.56.254.175/cookbook-api/api
         run: npm run build:web
 
-      - name: Prepare SSH key
+      # 构建产物推到 dist 分支（GitHub 自动认证，无需任何 Secret）
+      # 服务器侧 cron 每分钟拉取 dist 分支同步到网站目录
+      - name: Push dist to dist branch
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" | base64 -d > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-
-      - name: Deploy to server
-        run: |
-          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" app/dist/ root@123.56.254.175:/clouddream/www/CookBook/
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git checkout -B dist
+          rm -rf ./*
+          cp -r app/dist/* ./
+          cp app/dist/index.html index.html 2>/dev/null || true
+          git add -A
+          git diff --cached --quiet && echo "无变更" || git commit -m "deploy dist $(date -u +%Y%m%d%H%M%S)"
+          git push origin dist --force
