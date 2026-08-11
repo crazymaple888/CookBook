@@ -16,6 +16,7 @@ from app.schemas.recipe import (
     RecipeCard,
     RecipeCreate,
     RecipeDetail,
+    RecipeIngredientIn,
     RecipeIngredientOut,
     RecipeUpdate,
 )
