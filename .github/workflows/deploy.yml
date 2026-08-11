@@ -36,10 +36,13 @@ jobs:
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git checkout -B dist
-          rm -rf ./*
-          cp -r app/dist/* ./
-          cp app/dist/index.html index.html 2>/dev/null || true
+          # orphan 分支: 保留工作区文件, 不切换破坏产物
+          git checkout --orphan dist
+          # 先把产物移到根目录
+          mv app/dist/* ./ 2>/dev/null || true
+          mv app/dist/.[!.]* ./ 2>/dev/null || true
+          # 清理源码目录
+          rm -rf app backend README.md docker-compose.yml .github .gitignore 2>/dev/null || true
           git add -A
           git diff --cached --quiet && echo "无变更" || git commit -m "deploy dist $(date -u +%Y%m%d%H%M%S)"
           git push origin dist --force
