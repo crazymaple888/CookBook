@@ -1,0 +1,39 @@
+name: Deploy CookBook
+
+on:
+  push:
+    branches: [main]
+    paths: ['app/**', '.github/workflows/deploy.yml']
+  workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Install dependencies
+        working-directory: app
+        run: npm ci
+
+      - name: Build web
+        working-directory: app
+        env:
+          EXPO_PUBLIC_API_URL: http://123.56.254.175/cookbook-api/api
+        run: npm run build:web
+
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Deploy to server
+        run: |
+          rsync -avz --delete -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=accept-new" app/dist/ root@123.56.254.175:/clouddream/www/CookBook/
