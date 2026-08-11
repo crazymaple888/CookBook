@@ -1,0 +1,135 @@
+食材库 2608032 条, 同义词 10 条
+[阶段1] 读取 200000 行, 有效 192173 行, 耗时 16s
+[阶段1] 读取 400000 行, 有效 381392 行, 耗时 22s
+[阶段1] 读取 600000 行, 有效 570557 行, 耗时 29s
+[阶段1] 读取 800000 行, 有效 759612 行, 耗时 35s
+[阶段1] 读取 1000000 行, 有效 948945 行, 耗时 43s
+[阶段1] 读取 1200000 行, 有效 1138463 行, 耗时 50s
+[阶段1] 读取 1400000 行, 有效 1327904 行, 耗时 57s
+[阶段1] 读取 1600000 行, 有效 1517225 行, 耗时 63s
+[阶段1] 读取 1800000 行, 有效 1706489 行, 耗时 70s
+[阶段1] 读取 2000000 行, 有效 1895937 行, 耗时 77s
+[阶段1] 读取 2200000 行, 有效 2085363 行, 耗时 83s
+[阶段1] 读取 2400000 行, 有效 2274730 行, 耗时 90s
+[阶段1] 读取 2600000 行, 有效 2463757 行, 耗时 97s
+[阶段1] 读取 2800000 行, 有效 2653087 行, 耗时 103s
+[阶段1] 读取 3000000 行, 有效 2842379 行, 耗时 110s
+[阶段1] 读取 3200000 行, 有效 3031829 行, 耗时 116s
+[阶段1] 读取 3400000 行, 有效 3221170 行, 耗时 123s
+[阶段1] 读取 3600000 行, 有效 3410518 行, 耗时 129s
+[阶段1] 读取 3800000 行, 有效 3599805 行, 耗时 136s
+[阶段1] 读取 4000000 行, 有效 3789175 行, 耗时 142s
+[阶段1] 读取 4200000 行, 有效 3978190 行, 耗时 150s
+[阶段1] 读取 4400000 行, 有效 4167529 行, 耗时 156s
+[阶段1] 读取 4600000 行, 有效 4356758 行, 耗时 163s
+[阶段1] 读取 4800000 行, 有效 4546275 行, 耗时 170s
+[阶段1] 读取 5000000 行, 有效 4735866 行, 耗时 178s
+[阶段1] 读取 5200000 行, 有效 4925536 行, 耗时 183s
+[阶段1] 读取 5400000 行, 有效 5114915 行, 耗时 190s
+[阶段1] 读取 5600000 行, 有效 5304449 行, 耗时 198s
+[阶段1] 读取 5800000 行, 有效 5493856 行, 耗时 204s
+[阶段1] 读取 6000000 行, 有效 5683179 行, 耗时 211s
+[阶段1] 读取 6200000 行, 有效 5872526 行, 耗时 217s
+[阶段1] 读取 6400000 行, 有效 6061926 行, 耗时 223s
+[阶段1] 读取 6600000 行, 有效 6251866 行, 耗时 231s
+[阶段1] 读取 6800000 行, 有效 6441182 行, 耗时 237s
+[阶段1] 读取 7000000 行, 有效 6630776 行, 耗时 244s
+[阶段1] 读取 7200000 行, 有效 6820315 行, 耗时 252s
+[阶段1] 读取 7400000 行, 有效 7009844 行, 耗时 258s
+[阶段1] 读取 7600000 行, 有效 7199703 行, 耗时 264s
+[阶段1] 读取 7800000 行, 有效 7389676 行, 耗时 272s
+[阶段1] 读取 8000000 行, 有效 7579407 行, 耗时 278s
+[阶段1] 完成: 读取 8189517 行 -> 有效 7759495 行, 736809 个不同食材名, 耗时 284s
+[阶段2] 新食材 0 个, 耗时 285s
+[阶段3] 写入临时表...
+[阶段3] 临时表写入完成, 耗时 1520s, 开始原子替换
+Traceback (most recent call last):
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.DuplicateTable: relation "ix_recipe_ingredients_recipe_id" already exists
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "D:\Code\Web\cookbook\backend\scripts\rebuild_ingredients.py", line 184, in <module>
+    main()
+    ~~~~^^
+  File "D:\Code\Web\cookbook\backend\scripts\rebuild_ingredients.py", line 175, in main
+    db.execute(text("CREATE INDEX ix_recipe_ingredients_recipe_id ON recipe_ingredients(recipe_id)"))
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2373, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2280, in _execute_internal
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Code\Web\cookbook\backend\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+sqlalchemy.exc.ProgrammingError: (psycopg.errors.DuplicateTable) relation "ix_recipe_ingredients_recipe_id" already exists
+[SQL: CREATE INDEX ix_recipe_ingredients_recipe_id ON recipe_ingredients(recipe_id)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
