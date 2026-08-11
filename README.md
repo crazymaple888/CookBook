@@ -126,27 +126,36 @@ SECRET_KEY=your-secret-key-change-me
 
 #### 方式一：语料库数据镜像（推荐）
 
-语料库（下厨房语料库，约 1.8GB）通过独立的**数据镜像**分发，避免服务器重复下载：
+语料库（下厨房语料库，约 1.8GB）**不放进 git**，通过独立的 **Docker 数据镜像**分发。整个流程中，**只有本机构建镜像前需要 gzip 一次**，服务端拉取镜像后全自动解压，**不需要手动处理任何 JSON 文件**：
 
 ```bash
-# 1. 本机准备语料库并压缩（backend/data-image/ 目录下）
-#    把 recipe_corpus_full.json 放入该目录，然后 gzip：
-gzip -9 -k recipe_corpus_full.json      # 生成 .gz，约 400MB
+# —— 本机（仅需做一次）——
+# 1. 在 backend/data-image/ 目录下，把语料库 JSON 压缩成 .gz：
+#    （这是构建数据镜像的唯一准备步骤）
+gzip -9 -k recipe_corpus_full.json      # 生成 recipe_corpus_full.json.gz，约 400MB
 
-# 2. 构建数据镜像
+# 2. 构建数据镜像（scratch 基础镜像，把 .gz 打进去）
 cd backend/data-image
 docker build -t cookbook/corpus:latest .
 
-# 3. 推送/拷贝到服务器（阿里云 ACR / 本地镜像仓库均可）
+# 3. 推送到镜像仓库（阿里云 ACR / 本地镜像仓库均可）
 docker tag cookbook/corpus:latest <registry>/cookbook/corpus:latest
 docker push <registry>/cookbook/corpus:latest
 
-# 4. 服务器拉取后，应用镜像构建时自动从数据镜像复制语料库
+# —— 服务端（全自动，无需手动处理数据）——
+# 4. 拉取数据镜像
 docker pull <registry>/cookbook/corpus:latest
+
+# 5. 构建应用镜像并启动
+#    应用镜像构建时自动从数据镜像复制 .gz 到容器内 /data/
+#    后端 fetcher 启动时自动解压并读取，无需手动解压 JSON
 docker compose up --build
 ```
 
-应用镜像 `backend/Dockerfile` 通过多级构建从 `cookbook/corpus:latest` 复制语料库到 `/data/`，容器内 fetcher 自动解压读取。
+**自动化机制**：
+- `backend/Dockerfile` 通过多级构建从 `cookbook/corpus:latest` 复制语料库到 `/data/`
+- 后端 `fetcher.py` 检测到 `/data/recipe_corpus_full.json.gz` 自动解压读取（`IMPORT_DATA_DIR=/data`）
+- 更新语料库 = 重新构建数据镜像 + 推送 + 服务端重新 `docker compose up --build`
 
 #### 方式二：手动触发导入
 
