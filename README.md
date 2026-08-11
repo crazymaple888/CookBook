@@ -137,9 +137,8 @@ SECRET_KEY=your-secret-key-change-me
 #    下载后放到 backend/data-image/ 目录，然后 gzip：
 gzip -9 -k recipe_corpus_full.json      # 生成 recipe_corpus_full.json.gz，约 400MB
 
-# 2. 构建数据镜像（scratch 基础镜像，把 .gz 打进去）
-cd backend/data-image
-docker build -t cookbook/corpus:latest .
+# 2. 构建数据镜像（通过根目录 docker-compose.yml 的 corpus 服务）
+docker compose build corpus      # 等价于 cd backend/data-image && docker build
 
 # 3. 推送到镜像仓库（阿里云 ACR / 本地镜像仓库均可）
 docker tag cookbook/corpus:latest <registry>/cookbook/corpus:latest
@@ -154,6 +153,11 @@ docker pull <registry>/cookbook/corpus:latest
 #    后端 fetcher 启动时自动解压并读取，无需手动解压 JSON
 docker compose up --build
 ```
+
+**说明**：
+- 语料库数据镜像由根目录 `docker-compose.yml` 中的 `corpus` 服务管理（`profiles: ["data"]`，默认不随 `up` 启动）
+- 本机构建：`docker compose build corpus`
+- 服务端拉取后构建应用镜像，会自动带上语料库
 
 **自动化机制**：
 - `backend/Dockerfile` 通过多级构建从 `cookbook/corpus:latest` 复制语料库到 `/data/`

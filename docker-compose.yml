@@ -20,6 +20,15 @@ services:
     ports:
       - "6379:6379"
 
+  # 语料库数据镜像（scratch 纯数据镜像，不参与 up 启动）
+  # 构建：docker compose build corpus
+  # 拉取：docker compose pull corpus
+  corpus:
+    image: cookbook/corpus:latest
+    build:
+      context: ./backend/data-image
+    profiles: ["data"]
+
   api:
     build: ./backend
     environment:
