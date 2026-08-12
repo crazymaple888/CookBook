@@ -9,20 +9,25 @@ from sqlalchemy.pool import StaticPool
 from sqlalchemy.dialects.postgresql import JSONB as PGJSONB
 from sqlalchemy.ext.compiler import compiles
 
-from app.models import Base
+from app.models import Base, User
 
 from tests.test_matching import _compile_pgjsonb_sqlite  # noqa: F401  (registers compiler)
+
+# 模块级 session 工厂，供测试注册后授予上传权限
+_test_session: sessionmaker | None = None
 
 
 @pytest.fixture()
 def client():
+    global _test_session
     engine = create_engine(
         "sqlite:///:memory:",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
     Base.metadata.create_all(engine)
-    TestSession = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+    _test_session = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+    TestSession = _test_session
 
     def override_get_db():
         db = TestSession()
@@ -35,13 +40,27 @@ def client():
     with TestClient(app) as c:
         yield c
     app.dependency_overrides.clear()
+    _test_session = None
 
 
 def _register(client, username="alice", password="secret123", email="alice@test.com"):
-    return client.post(
+    resp = client.post(
         "/api/auth/register",
         json={"username": username, "password": password, "email": email},
     )
+    # 授予上传权限，方便测试发布流程（生产环境需申请审核）
+    if _test_session is not None and resp.status_code == 200:
+        from sqlalchemy import update
+
+        db = _test_session()
+        try:
+            db.execute(
+                update(User).where(User.username == username).values(uploader_status="approved")
+            )
+            db.commit()
+        finally:
+            db.close()
+    return resp
 
 
 def _auth_headers(resp) -> dict:
