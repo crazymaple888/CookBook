@@ -59,7 +59,7 @@ export default function AuthScreen() {
               router.replace('/');
             }
           }}>
-          <Ionicons name="close" size={22} color="#1f1f1f" />
+          <Ionicons name="close" size={22} color="#e8ece8" />
         </TouchableOpacity>
       </View>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
@@ -72,6 +72,7 @@ export default function AuthScreen() {
           <TextInput
             style={styles.input}
             placeholder="用户名"
+            placeholderTextColor="#aab3ac"
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
@@ -80,6 +81,7 @@ export default function AuthScreen() {
         <TextInput
           style={styles.input}
           placeholder={mode === 'login' ? '用户名或邮箱' : '邮箱（可选）'}
+          placeholderTextColor="#aab3ac"
           value={mode === 'login' ? account : email}
           onChangeText={mode === 'login' ? setAccount : setEmail}
           keyboardType={mode === 'register' ? 'email-address' : 'default'}
@@ -88,6 +90,7 @@ export default function AuthScreen() {
         <TextInput
           style={styles.input}
           placeholder="密码"
+          placeholderTextColor="#aab3ac"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -108,29 +111,30 @@ export default function AuthScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f7f6f3' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   topBar: { paddingHorizontal: 12, paddingTop: 12 },
-  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#1c211e', alignItems: 'center', justifyContent: 'center' },
   content: { padding: 28, paddingTop: 30 },
-  title: { fontSize: 28, fontWeight: '800', color: '#1f1f1f' },
-  subtitle: { fontSize: 14, color: '#8a8a8a', marginTop: 4, marginBottom: 28 },
+  title: { fontSize: 28, fontWeight: '800', color: '#e8ece8' },
+  subtitle: { fontSize: 14, color: '#aab3ac', marginTop: 4, marginBottom: 28 },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: '#e5e3e5',
+    borderColor: '#3a403c',
+    color: '#e8ece8',
     marginBottom: 12,
   },
   authBtn: {
-    backgroundColor: '#e6532e',
+    backgroundColor: '#2f5d50',
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
     marginTop: 8,
   },
-  authBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  authBtnText: { color: '#e8ece8', fontSize: 16, fontWeight: '700' },
   disabled: { opacity: 0.5 },
-  switch: { color: '#e6532e', textAlign: 'center', marginTop: 18, fontSize: 14 },
+  switch: { color: '#2f5d50', textAlign: 'center', marginTop: 18, fontSize: 14 },
 });

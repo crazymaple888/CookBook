@@ -99,3 +99,57 @@ def list_ingredients(
 ):
     ings = db.scalars(select(Ingredient).order_by(Ingredient.name)).all()
     return [IngredientOut.model_validate(i) for i in ings]
+
+
+class UploadRequestOut(BaseModel):
+    id: int
+    username: str
+    email: str | None
+    nickname: str | None
+    uploader_status: str
+
+
+class ReviewBody(BaseModel):
+    action: str  # approve | reject
+
+
+@router.get("/upload-requests", response_model=list[UploadRequestOut])
+def list_upload_requests(
+    _: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    users = db.scalars(
+        select(User)
+        .where(User.uploader_status == "pending")
+        .order_by(User.id.desc())
+    ).all()
+    return [
+        UploadRequestOut(
+            id=u.id,
+            username=u.username,
+            email=u.email,
+            nickname=u.nickname,
+            uploader_status=u.uploader_status,
+        )
+        for u in users
+    ]
+
+
+@router.post("/upload-requests/{user_id}/review")
+def review_upload_request(
+    user_id: int,
+    payload: ReviewBody,
+    _: User = Depends(get_current_admin),
+    db: Session = Depends(get_db),
+):
+    target = db.get(User, user_id)
+    if target is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if payload.action == "approve":
+        target.uploader_status = "approved"
+    elif payload.action == "reject":
+        target.uploader_status = "rejected"
+    else:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid action")
+    db.commit()
+    return {"id": target.id, "username": target.username, "status": target.uploader_status}

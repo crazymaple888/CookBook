@@ -59,7 +59,7 @@ export default function MatchScreen() {
           {selectedList.map((ing) => (
             <TouchableOpacity key={ing.id} style={styles.chip} onPress={() => toggle(ing)}>
               <Text style={styles.chipText}>{ing.name}</Text>
-              <Ionicons name="close" size={14} color="#e6532e" />
+              <Ionicons name="close" size={14} color="#6fae97" />
             </TouchableOpacity>
           ))}
           {freeText.map((t) => (
@@ -71,7 +71,7 @@ export default function MatchScreen() {
                 setSubmitted(false);
               }}>
               <Text style={styles.chipText}>{t}</Text>
-              <Ionicons name="close" size={14} color="#e6532e" />
+              <Ionicons name="close" size={14} color="#6fae97" />
             </TouchableOpacity>
           ))}
         </View>
@@ -82,13 +82,14 @@ export default function MatchScreen() {
         <TextInput
           style={styles.input}
           placeholder="输入食材，如：番茄"
+          placeholderTextColor="#aab3ac"
           value={input}
           onChangeText={setInput}
           onSubmitEditing={addFreeText}
           returnKeyType="done"
         />
         <TouchableOpacity style={styles.addBtn} onPress={addFreeText}>
-          <Ionicons name="add" size={20} color="#fff" />
+          <Ionicons name="add" size={20} color="#e8ece8" />
         </TouchableOpacity>
       </View>
 
@@ -100,7 +101,7 @@ export default function MatchScreen() {
         ]}
         disabled={selectedList.length === 0 && freeText.length === 0}
         onPress={() => setSubmitted(true)}>
-        <Ionicons name="search" size={18} color="#fff" />
+        <Ionicons name="search" size={18} color="#e8ece8" />
         <Text style={styles.matchBtnText}>
           {submitted ? '重新匹配' : '开始匹配菜谱'}
         </Text>
@@ -182,35 +183,38 @@ function ResultCard({ item, index }: { item: any; index: number }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f7f6f3' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   content: { padding: 16, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: '800', color: '#1f1f1f' },
-  subtitle: { fontSize: 14, color: '#8a8a8a', marginTop: 4, marginBottom: 16 },
+  title: { fontSize: 24, fontWeight: '800', color: '#e8ece8' },
+  subtitle: { fontSize: 14, color: '#aab3ac', marginTop: 4, marginBottom: 16 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 12 },
   chip: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#fdeee8',
+    backgroundColor: '#232926',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#3a403c',
   },
-  chipText: { color: '#c8452a', fontWeight: '600' },
+  chipText: { color: '#6fae97', fontWeight: '600' },
   inputRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
   input: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#e5e3e5',
+    borderColor: '#3a403c',
+    color: '#e8ece8',
   },
   addBtn: {
     width: 46,
     borderRadius: 12,
-    backgroundColor: '#e6532e',
+    backgroundColor: '#2f5d50',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -219,48 +223,48 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#e6532e',
+    backgroundColor: '#2f5d50',
     borderRadius: 14,
     paddingVertical: 14,
     marginBottom: 20,
   },
   matchBtnDisabled: { opacity: 0.5 },
-  matchBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  loading: { color: '#8a8a8a', textAlign: 'center', marginVertical: 20 },
+  matchBtnText: { color: '#e8ece8', fontSize: 16, fontWeight: '700' },
+  loading: { color: '#aab3ac', textAlign: 'center', marginVertical: 20 },
   results: { marginBottom: 20 },
-  resultsHeader: { fontSize: 15, fontWeight: '700', color: '#444', marginBottom: 10 },
+  resultsHeader: { fontSize: 15, fontWeight: '700', color: '#e8ece8', marginBottom: 10 },
   resultCard: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#f0eef0',
+    borderColor: '#3a403c',
   },
   resultHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  resultTitle: { fontSize: 16, fontWeight: '700', color: '#1f1f1f', flex: 1 },
-  coverage: { backgroundColor: '#f0e9fb', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3 },
-  coverageFull: { backgroundColor: '#e8f4ec' },
-  coverageText: { color: '#5b2d8a', fontWeight: '700', fontSize: 12 },
-  resultMeta: { fontSize: 13, color: '#777', marginTop: 6 },
+  resultTitle: { fontSize: 16, fontWeight: '700', color: '#e8ece8', flex: 1 },
+  coverage: { backgroundColor: '#2a3430', borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3 },
+  coverageFull: { backgroundColor: '#2f5d50' },
+  coverageText: { color: '#c7cfc9', fontWeight: '700', fontSize: 12 },
+  resultMeta: { fontSize: 13, color: '#aab3ac', marginTop: 6 },
   missingRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
   missingLabel: { fontSize: 13, color: '#d99a26', fontWeight: '600' },
   missingItem: { fontSize: 13, color: '#b3761c' },
-  empty: { color: '#8a8a8a', textAlign: 'center', marginVertical: 20 },
-  sectionTitle: { fontSize: 17, fontWeight: '700', color: '#1f1f1f', marginBottom: 12, marginTop: 8 },
+  empty: { color: '#aab3ac', textAlign: 'center', marginVertical: 20 },
+  sectionTitle: { fontSize: 17, fontWeight: '700', color: '#e8ece8', marginBottom: 12, marginTop: 8 },
   category: { marginBottom: 16 },
-  categoryName: { fontSize: 15, fontWeight: '600', color: '#444', marginBottom: 8 },
+  categoryName: { fontSize: 15, fontWeight: '600', color: '#c7cfc9', marginBottom: 8 },
   ingGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   ingChip: {
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderWidth: 1,
-    borderColor: '#e5e3e5',
+    borderColor: '#3a403c',
   },
-  ingChipSel: { backgroundColor: '#e6532e', borderColor: '#e6532e' },
-  ingText: { color: '#444' },
-  ingTextSel: { color: '#fff', fontWeight: '600' },
+  ingChipSel: { backgroundColor: '#2f5d50', borderColor: '#2f5d50' },
+  ingText: { color: '#c7cfc9' },
+  ingTextSel: { color: '#e8ece8', fontWeight: '600' },
 });

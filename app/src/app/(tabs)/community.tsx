@@ -23,13 +23,14 @@ export default function CommunityScreen() {
         <TextInput
           style={styles.searchInput}
           placeholder="搜索菜谱…"
+          placeholderTextColor="#aab3ac"
           value={q}
           onChangeText={setQ}
           onSubmitEditing={onSearch}
           returnKeyType="search"
         />
         <TouchableOpacity style={styles.searchBtn} onPress={onSearch}>
-          <Ionicons name="search" size={20} color="#fff" />
+          <Ionicons name="search" size={20} color="#e8ece8" />
         </TouchableOpacity>
       </View>
 
@@ -59,28 +60,29 @@ export default function CommunityScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f7f6f3' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   listContainer: { flex: 1, width: '100%' },
   searchRow: { flexDirection: 'row', gap: 8, padding: 16, paddingBottom: 8 },
   searchInput: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderWidth: 1,
-    borderColor: '#e5e3e5',
+    borderColor: '#3a403c',
+    color: '#e8ece8',
   },
   searchBtn: {
     width: 46,
     borderRadius: 12,
-    backgroundColor: '#e6532e',
+    backgroundColor: '#2f5d50',
     alignItems: 'center',
     justifyContent: 'center',
   },
   sortRow: { flexDirection: 'row', gap: 20, paddingHorizontal: 18, paddingBottom: 8 },
-  sortText: { fontSize: 15, color: '#777', fontWeight: '600' },
-  sortActive: { color: '#e6532e', fontWeight: '800' },
+  sortText: { fontSize: 15, color: '#aab3ac', fontWeight: '600' },
+  sortActive: { color: '#2f5d50', fontWeight: '800' },
   list: { padding: 16, paddingTop: 4 },
-  empty: { color: '#8a8a8a', textAlign: 'center', marginTop: 40 },
+  empty: { color: '#aab3ac', textAlign: 'center', marginTop: 40 },
 });

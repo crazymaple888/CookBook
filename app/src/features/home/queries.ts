@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';
 import type { MatchResponse, Page, RecipeCard, RecipeDetail } from '@/lib/types';
@@ -7,6 +7,23 @@ export function useRandomRecipes(count = 10) {
   return useQuery({
     queryKey: ['recipes', 'random', count],
     queryFn: () => api.get<RecipeCard[]>(`/recipes/random?count=${count}`),
+  });
+}
+
+// Infinite random feed: first page 10, subsequent pages 5 each.
+// Random API returns a fresh set each call, so we dedup accumulated items.
+export function useRandomRecipesInfinite() {
+  const FIRST_PAGE = 10;
+  const NEXT_PAGE = 5;
+  return useInfiniteQuery({
+    queryKey: ['recipes', 'random-infinite'],
+    initialPageParam: 0,
+    queryFn: async ({ pageParam }) => {
+      const count = pageParam === 0 ? FIRST_PAGE : NEXT_PAGE;
+      return api.get<RecipeCard[]>(`/recipes/random?count=${count}`);
+    },
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage.length === 0 ? undefined : allPages.length,
   });
 }
 

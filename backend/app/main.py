@@ -9,7 +9,7 @@ from app.core.redis import close_redis, init_redis
 from app.models.base import engine, SessionLocal
 from app.scheduler.jobs import schedule_import_job
 from app.scheduler.scheduler import shutdown_scheduler, start_scheduler
-from app.routers import auth, community, ingredients, matching, recipes, users, admin
+from app.routers import auth, community, ingredients, matching, recipes, users, admin, upload
 
 
 @asynccontextmanager
@@ -35,6 +35,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api")
 app.include_router(users.router, prefix="/api")
+app.include_router(upload.router, prefix="/api")
 app.include_router(recipes.router, prefix="/api")
 app.include_router(ingredients.router, prefix="/api")
 app.include_router(matching.router, prefix="/api")

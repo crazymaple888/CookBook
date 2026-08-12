@@ -20,7 +20,7 @@ const EMOJI_BY_TITLE: [RegExp, string][] = [
   [/沙拉|凉拌/, '🥗'],
 ];
 
-const CARD_COLORS = ['#fdeee8', '#e8f4ec', '#e8effb', '#faf0e4', '#f0e9fb', '#e9f7f5'];
+const CARD_COLORS = ['#2a3430', '#332e28', '#29322f', '#342f29', '#2b302c', '#302c26'];
 
 export function categoryEmoji(title: string, fallback = '🍽️'): string {
   for (const [re, emoji] of EMOJI_BY_TITLE) {
@@ -51,11 +51,11 @@ export function RecipeCard({ recipe, index = 0 }: { recipe: RecipeCardType; inde
           </Text>
           <View style={styles.metaRow}>
             <View style={styles.metaItem}>
-              <Ionicons name="heart" size={13} color="#d9574a" />
+              <Ionicons name="heart" size={13} color="#c96f5a" />
               <Text style={styles.metaText}>{recipe.likes_count}</Text>
             </View>
             <View style={styles.metaItem}>
-              <Ionicons name="bookmark" size={13} color="#e0a437" />
+              <Ionicons name="bookmark" size={13} color="#c99a3d" />
               <Text style={styles.metaText}>{recipe.favorites_count}</Text>
             </View>
             <View style={styles.metaItem}>
@@ -72,17 +72,17 @@ export function RecipeCard({ recipe, index = 0 }: { recipe: RecipeCardType; inde
 const styles = StyleSheet.create({
   card: {
     width: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1c211e',
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#f0eef0',
+    borderColor: '#2f3532',
     marginBottom: 16,
   },
   cover: {
     width: '100%',
     height: 160,
-    backgroundColor: '#f0eef0',
+    backgroundColor: '#232926',
   },
   placeholderEmoji: {
     fontSize: 56,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     fontWeight: '700',
-    color: '#1f1f1f',
+    color: '#e8ece8',
     marginBottom: 8,
   },
   metaRow: {
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 13,
-    color: '#777',
+    color: '#aab3ac',
   },
 });

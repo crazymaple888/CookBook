@@ -67,6 +67,11 @@ def create_recipe(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    if not user.is_admin and user.uploader_status != "approved":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You need upload permission to publish recipes",
+        )
     recipe = recipe_service.create_recipe(db, payload, user.id)
     return recipe_service.get_recipe_detail(db, recipe.id, user.id)
 

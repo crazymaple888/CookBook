@@ -34,7 +34,7 @@ export default function RecipeDetailScreen() {
   if (isLoading || !recipe) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color="#e6532e" />
+        <ActivityIndicator color="#2f5d50" />
       </View>
     );
   }
@@ -80,7 +80,7 @@ export default function RecipeDetailScreen() {
               router.replace('/');
             }
           }}>
-          <Ionicons name="chevron-back" size={24} color="#1f1f1f" />
+          <Ionicons name="chevron-back" size={24} color="#e8ece8" />
         </TouchableOpacity>
         <Text style={styles.topTitle}>菜谱详情</Text>
         <View style={styles.topRight} />
@@ -109,13 +109,13 @@ export default function RecipeDetailScreen() {
             <TouchableOpacity
               style={[styles.actionBtn, recipe.is_liked && styles.actionActive]}
               onPress={toggleLike}>
-              <Ionicons name={recipe.is_liked ? 'heart' : 'heart-outline'} size={20} color={recipe.is_liked ? '#d9574a' : '#555'} />
+              <Ionicons name={recipe.is_liked ? 'heart' : 'heart-outline'} size={20} color={recipe.is_liked ? '#c96f5a' : '#555'} />
               <Text style={styles.actionText}>点赞</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.actionBtn, recipe.is_favorited && styles.actionActive]}
               onPress={toggleFavorite}>
-              <Ionicons name={recipe.is_favorited ? 'bookmark' : 'bookmark-outline'} size={20} color={recipe.is_favorited ? '#e0a437' : '#555'} />
+              <Ionicons name={recipe.is_favorited ? 'bookmark' : 'bookmark-outline'} size={20} color={recipe.is_favorited ? '#c99a3d' : '#555'} />
               <Text style={styles.actionText}>{recipe.is_favorited ? '已收藏' : '收藏'}</Text>
             </TouchableOpacity>
           </View>
@@ -155,6 +155,7 @@ export default function RecipeDetailScreen() {
               <TextInput
                 style={styles.commentInput}
                 placeholder="说点什么…"
+                placeholderTextColor="#aab3ac"
                 value={commentText}
                 onChangeText={setCommentText}
               />
@@ -176,7 +177,7 @@ export default function RecipeDetailScreen() {
 function Stat({ icon, value }: { icon: any; value: number }) {
   return (
     <View style={styles.stat}>
-      <Ionicons name={icon} size={16} color="#8a8a8a" />
+      <Ionicons name={icon} size={16} color="#aab3ac" />
       <Text style={styles.statText}>{value}</Text>
     </View>
   );
@@ -187,29 +188,29 @@ function SectionTitle({ children }: { children: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f7f6f3' },
-  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f7f6f3' },
+  container: { flex: 1, backgroundColor: 'transparent' },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'transparent' },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 12,
     paddingVertical: 8,
-    backgroundColor: '#f7f6f3',
+    backgroundColor: 'transparent',
   },
-  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
-  topTitle: { fontSize: 17, fontWeight: '700', color: '#1f1f1f' },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#1c211e', alignItems: 'center', justifyContent: 'center' },
+  topTitle: { fontSize: 17, fontWeight: '700', color: '#e8ece8' },
   topRight: { width: 40 },
   content: { paddingBottom: 40 },
-  cover: { width: '100%', height: 220, backgroundColor: '#e8e6e8' },
+  cover: { width: '100%', height: 220, backgroundColor: '#3a403c' },
   placeholderCover: { alignItems: 'center', justifyContent: 'center' },
   placeholderEmoji: { fontSize: 80 },
   body: { padding: 18 },
-  title: { fontSize: 24, fontWeight: '800', color: '#1f1f1f' },
-  desc: { fontSize: 14, color: '#666', marginTop: 6, lineHeight: 20 },
+  title: { fontSize: 24, fontWeight: '800', color: '#e8ece8' },
+  desc: { fontSize: 14, color: '#aab3ac', marginTop: 6, lineHeight: 20 },
   statsRow: { flexDirection: 'row', gap: 18, marginTop: 14 },
   stat: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  statText: { fontSize: 14, color: '#555' },
+  statText: { fontSize: 14, color: '#c7cfc9' },
   actions: { flexDirection: 'row', gap: 12, marginTop: 16 },
   actionBtn: {
     flexDirection: 'row',
@@ -218,50 +219,51 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 9,
     borderRadius: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderWidth: 1,
-    borderColor: '#e5e3e5',
+    borderColor: '#3a403c',
   },
-  actionActive: { backgroundColor: '#fdeee8', borderColor: '#f5c2b0' },
-  actionText: { color: '#555', fontWeight: '600' },
-  sectionTitle: { fontSize: 18, fontWeight: '800', color: '#1f1f1f', marginTop: 26, marginBottom: 12 },
+  actionActive: { backgroundColor: '#2a3430', borderColor: '#3a403c' },
+  actionText: { color: '#c7cfc9', fontWeight: '600' },
+  sectionTitle: { fontSize: 18, fontWeight: '800', color: '#e8ece8', marginTop: 26, marginBottom: 12 },
   ingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 9,
     borderBottomWidth: 1,
-    borderBottomColor: '#efedef',
+    borderBottomColor: '#3a403c',
   },
-  ingName: { fontSize: 15, color: '#333' },
+  ingName: { fontSize: 15, color: '#e8ece8' },
   ingQty: { fontSize: 14, color: '#888' },
   stepRow: { flexDirection: 'row', gap: 12, marginBottom: 14 },
   stepNum: {
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: '#e6532e',
+    backgroundColor: '#2f5d50',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  stepNumText: { color: '#fff', fontWeight: '700', fontSize: 13 },
-  stepText: { flex: 1, fontSize: 15, color: '#333', lineHeight: 22 },
+  stepNumText: { color: '#e8ece8', fontWeight: '700', fontSize: 13 },
+  stepText: { flex: 1, fontSize: 15, color: '#e8ece8', lineHeight: 22 },
   commentInputRow: { flexDirection: 'row', gap: 8 },
   commentInput: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#1c211e',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 9,
     borderWidth: 1,
-    borderColor: '#e5e3e5',
+    borderColor: '#3a403c',
+    color: '#e8ece8',
   },
   commentBtn: {
-    backgroundColor: '#e6532e',
+    backgroundColor: '#2f5d50',
     borderRadius: 12,
     paddingHorizontal: 16,
     justifyContent: 'center',
   },
-  commentBtnText: { color: '#fff', fontWeight: '700' },
-  loginHint: { color: '#e6532e', fontSize: 14 },
-  emptyHint: { color: '#999' },
+  commentBtnText: { color: '#e8ece8', fontWeight: '700' },
+  loginHint: { color: '#2f5d50', fontSize: 14 },
+  emptyHint: { color: '#aab3ac' },
 });

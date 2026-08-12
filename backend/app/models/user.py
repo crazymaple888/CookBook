@@ -16,3 +16,5 @@ class User(Base, TimestampMixin):
     bio: Mapped[str | None] = mapped_column(String(255), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    # 上传权限状态：none / pending / approved / rejected
+    uploader_status: Mapped[str] = mapped_column(String(16), default="none", nullable=False)

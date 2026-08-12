@@ -22,7 +22,7 @@ export default function MyRecipesScreen() {
               router.replace('/');
             }
           }}>
-          <Ionicons name="chevron-back" size={24} color="#1f1f1f" />
+          <Ionicons name="chevron-back" size={24} color="#e8ece8" />
         </TouchableOpacity>
         <Text style={styles.topTitle}>我发布的菜谱</Text>
         <View style={styles.topRight} />
@@ -41,7 +41,7 @@ export default function MyRecipesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f7f6f3' },
+  container: { flex: 1, backgroundColor: 'transparent' },
   topBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
   },
-  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' },
-  topTitle: { fontSize: 17, fontWeight: '700', color: '#1f1f1f' },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#1c211e', alignItems: 'center', justifyContent: 'center' },
+  topTitle: { fontSize: 17, fontWeight: '700', color: '#e8ece8' },
   topRight: { width: 40 },
   list: { padding: 16 },
-  empty: { color: '#8a8a8a', textAlign: 'center', marginTop: 40 },
+  empty: { color: '#aab3ac', textAlign: 'center', marginTop: 40 },
 });
