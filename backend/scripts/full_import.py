@@ -19,7 +19,7 @@ from app.services.importer.fetcher import download_dataset, iter_records
 from app.services.importer.importer import ImportStats, import_records
 from app.services.importer.pipeline import _record_to_draft
 
-BATCH_SIZE = 2000
+BATCH_SIZE = 800
 PROGRESS_EVERY = 20000
 
 
