@@ -44,6 +44,10 @@ def content_hash(record: RecipeDraft) -> str:
     ).hexdigest()
 
 
+# cache ingredients table to avoid re-loading 370k+ rows per batch (OOM fix)
+_INGREDIENT_CACHE: dict | None = None
+
+
 def import_records(db: Session, records: list[RecipeDraft], source: str) -> ImportStats:
     stats = ImportStats()
 
@@ -54,7 +58,10 @@ def import_records(db: Session, records: list[RecipeDraft], source: str) -> Impo
     resolved = resolve_many(db, all_names)
 
     # Map canonical names -> existing ingredients to avoid repeated lookups.
-    existing = {ing.name: ing for ing in db.scalars(select(Ingredient)).all()}
+    global _INGREDIENT_CACHE
+    if _INGREDIENT_CACHE is None:
+        _INGREDIENT_CACHE = {ing.name: ing for ing in db.scalars(select(Ingredient)).all()}
+    existing = _INGREDIENT_CACHE
 
     for rec in records:
         if not rec.title:
