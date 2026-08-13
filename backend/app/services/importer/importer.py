@@ -44,8 +44,8 @@ def content_hash(record: RecipeDraft) -> str:
     ).hexdigest()
 
 
-# cache ingredients table to avoid re-loading 370k+ rows per batch (OOM fix)
-_INGREDIENT_CACHE: dict | None = None
+# incremental name->id cache (lightweight, avoids loading full ingredients table)
+_INGREDIENT_CACHE: dict[str, int] = {}
 
 
 def import_records(db: Session, records: list[RecipeDraft], source: str) -> ImportStats:
@@ -58,10 +58,7 @@ def import_records(db: Session, records: list[RecipeDraft], source: str) -> Impo
     resolved = resolve_many(db, all_names)
 
     # Map canonical names -> existing ingredients to avoid repeated lookups.
-    global _INGREDIENT_CACHE
-    if _INGREDIENT_CACHE is None:
-        _INGREDIENT_CACHE = {ing.name: ing for ing in db.scalars(select(Ingredient)).all()}
-    existing = _INGREDIENT_CACHE
+    existing = _INGREDIENT_CACHE  # name -> id, built incrementally
 
     for rec in records:
         if not rec.title:
@@ -157,9 +154,9 @@ def _get_or_create_ingredient(
     Uses INSERT ... ON CONFLICT DO NOTHING so a savepoint rollback elsewhere
     never leaves a phantom id (the ingredient is committed with the batch).
     """
-    ing = existing.get(name)
-    if ing is not None:
-        return ing.id
+    ing_id = existing.get(name)
+    if ing_id is not None:
+        return ing_id
 
     stmt = (
         pg_insert(Ingredient)
@@ -172,5 +169,5 @@ def _get_or_create_ingredient(
         ing_id = db.scalar(select(Ingredient.id).where(Ingredient.name == name))
     else:
         stats.created_ingredients += 1
-    existing[name] = db.get(Ingredient, ing_id)
+    existing[name] = ing_id
     return ing_id
