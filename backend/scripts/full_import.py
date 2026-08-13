@@ -64,6 +64,7 @@ def main() -> None:
             _merge(stats, batch_stats)
             drafts = []
             db.commit()
+            db.expunge_all()  # release identity map to avoid unbounded memory growth
             if total_read % PROGRESS_EVERY == 0:
                 _report(stats, total_read, start)
 
@@ -71,6 +72,7 @@ def main() -> None:
         batch_stats = import_records(db, drafts, "chinese-recipes-corpus")
         _merge(stats, batch_stats)
         db.commit()
+        db.expunge_all()
 
     elapsed = time.time() - start
     total = db.scalar(select(func.count()).select_from(Recipe))
