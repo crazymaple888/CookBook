@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     cors_origins: list[str] = [
         "http://localhost:8081",
         "http://localhost:3000",
+        "http://nirvanamaple.cn",
+        "https://nirvanamaple.cn",
+        "http://123.56.254.175",
     ]
 
     import_source: str = "chinese-recipes-corpus"
