@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     IMPORT_DATA_DIR=/data
 
 COPY pyproject.toml ./
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple .
 
 COPY . .
 
