@@ -1,3 +1,5 @@
+import random
+
 from fastapi import HTTPException, status
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
@@ -37,12 +39,30 @@ RECIPE_CARD_COLS = (
 
 def random_recipes(db: Session, count: int = 10, user_id: int | None = None) -> list[RecipeCard]:
     count = min(max(count, 1), 50)
+    # 167 万行 ORDER BY random() 全排序 18s -> 改用 ID 区间跳点采样（毫秒级）
+    min_id, max_id = db.execute(
+        select(func.min(Recipe.id), func.max(Recipe.id)).where(Recipe.is_published.is_(True))
+    ).one()
+    if min_id is None or max_id is None:
+        return []
+    span = max_id - min_id
+    ids = {min_id + random.randrange(span + 1) for _ in range(count * 20)}
     rows = db.execute(
         select(*RECIPE_CARD_COLS)
-        .where(Recipe.is_published.is_(True))
+        .where(Recipe.is_published.is_(True), Recipe.id.in_(ids))
         .order_by(func.random())
         .limit(count)
     ).all()
+    if len(rows) < count:  # ID 空洞时补足
+        got = {r.id for r in rows}
+        rows.extend(
+            db.execute(
+                select(*RECIPE_CARD_COLS)
+                .where(Recipe.is_published.is_(True), ~Recipe.id.in_(got))
+                .order_by(func.random())
+                .limit(count - len(rows))
+            ).all()
+        )
     return [_card_from_row(r) for r in rows]
 
 
