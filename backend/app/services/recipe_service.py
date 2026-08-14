@@ -76,13 +76,33 @@ def list_recipes(
     else:
         stmt = stmt.order_by(Recipe.created_at.desc(), Recipe.id.desc())
 
-    page_obj = paginate(db, stmt, page, page_size, count_source=count_stmt)
+    # count cached in redis: corpus is static after import, so total rarely changes.
+    # full-table count on 1.6M rows costs ~15s on this slow disk, cache makes it instant.
+    from app.core.redis import get_redis_client
+
+    cache_key = f"cookbook:recipes:total:{query or '':}:{category_id or 0}"
+    r = get_redis_client()
+    total: int | None = None
+    try:
+        cached = r.get(cache_key)
+        if cached is not None:
+            total = int(cached)
+    except Exception:
+        pass
+    if total is None:
+        total = db.scalar(select(func.count()).select_from(count_stmt.subquery())) or 0
+        try:
+            r.set(cache_key, str(total), ex=3600)
+        except Exception:
+            pass
+
+    rows = db.execute(stmt.offset((page - 1) * page_size).limit(page_size)).all()
     return Page[RecipeCard](
-        items=[_card_from_row(r) for r in page_obj.items],
-        total=page_obj.total,
-        page=page_obj.page,
-        page_size=page_obj.page_size,
-        has_more=page_obj.has_more,
+        items=[_card_from_row(r) for r in rows],
+        total=total,
+        page=page,
+        page_size=page_size,
+        has_more=page * page_size < total,
     )
 
 
@@ -235,13 +255,33 @@ def my_recipes(db: Session, user_id: int, page: int, page_size: int) -> Page[Rec
     count_stmt = select(Recipe.id).where(
         Recipe.source == "user", Recipe.source_id.like(f"user-{user_id}-%")
     )
-    page_obj = paginate(db, stmt, page, page_size, count_source=count_stmt)
+    # count cached in redis: corpus is static after import, so total rarely changes.
+    # full-table count on 1.6M rows costs ~15s on this slow disk, cache makes it instant.
+    from app.core.redis import get_redis_client
+
+    cache_key = f"cookbook:recipes:total:{query or '':}:{category_id or 0}"
+    r = get_redis_client()
+    total: int | None = None
+    try:
+        cached = r.get(cache_key)
+        if cached is not None:
+            total = int(cached)
+    except Exception:
+        pass
+    if total is None:
+        total = db.scalar(select(func.count()).select_from(count_stmt.subquery())) or 0
+        try:
+            r.set(cache_key, str(total), ex=3600)
+        except Exception:
+            pass
+
+    rows = db.execute(stmt.offset((page - 1) * page_size).limit(page_size)).all()
     return Page[RecipeCard](
-        items=[_card_from_row(r) for r in page_obj.items],
-        total=page_obj.total,
-        page=page_obj.page,
-        page_size=page_obj.page_size,
-        has_more=page_obj.has_more,
+        items=[_card_from_row(r) for r in rows],
+        total=total,
+        page=page,
+        page_size=page_size,
+        has_more=page * page_size < total,
     )
 
 
