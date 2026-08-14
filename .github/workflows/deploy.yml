@@ -27,7 +27,7 @@ jobs:
       - name: Build web
         working-directory: app
         env:
-          EXPO_PUBLIC_API_URL: http://123.56.254.175/cookbook-api/api
+          EXPO_PUBLIC_API_URL: http://web.nirvanamaple.cn/CookBook/api
         run: npm run build:web
 
       # 构建产物推到 dist 分支（GitHub 自动认证，无需任何 Secret）

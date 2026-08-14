@@ -16,6 +16,8 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://nirvanamaple.cn",
         "https://nirvanamaple.cn",
+        "http://web.nirvanamaple.cn",
+        "https://web.nirvanamaple.cn",
         "http://123.56.254.175",
     ]
 

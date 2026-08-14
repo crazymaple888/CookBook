@@ -46,7 +46,7 @@ services:
       redis:
         condition: service_started
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"  # 仅本机可访问, 外网通过 nginx 反代
 
 volumes:
   pgdata:
