@@ -1,13 +1,14 @@
 services:
   db:
     image: postgres:16-alpine
+    mac_address: 02:42:ac:14:00:0a
     deploy:
       resources:
         limits:
           memory: 256m
     environment:
       POSTGRES_USER: cookbook
-      POSTGRES_PASSWORD: cookbook
+      POSTGRES_PASSWORD: ${COOKBOOK_DB_PASSWORD}
       POSTGRES_DB: cookbook
     ports:
       - "5432:5432"
@@ -21,6 +22,7 @@ services:
 
   redis:
     image: redis:7-alpine
+    mac_address: 02:42:ac:14:00:0b
     deploy:
       resources:
         limits:
@@ -35,7 +37,7 @@ services:
         limits:
           memory: 512m
     environment:
-      DATABASE_URL: postgresql+psycopg://cookbook:cookbook@db:5432/cookbook
+      DATABASE_URL: postgresql+psycopg://cookbook:${COOKBOOK_DB_PASSWORD}@db:5432/cookbook
       REDIS_URL: redis://redis:6379/0
       SECRET_KEY: dev-secret-key-change-me-0123456789abcdef
     depends_on:
