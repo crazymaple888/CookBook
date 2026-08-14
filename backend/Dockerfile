@@ -1,7 +1,4 @@
-# 应用镜像 —— 通过多级构建引用语料库数据镜像
-# 数据镜像需先构建好：backend/data-image 目录下 docker build -t cookbook/corpus:latest .
-FROM cookbook/corpus:latest AS corpus
-
+# 应用镜像（语料数据已导入 PG，不再依赖 corpus 数据镜像）
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -14,9 +11,6 @@ COPY pyproject.toml ./
 RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple .
 
 COPY . .
-
-# 从数据镜像复制语料库
-COPY --from=corpus /data/recipe_corpus_full.json.gz /data/recipe_corpus_full.json.gz
 
 EXPOSE 8000
 
